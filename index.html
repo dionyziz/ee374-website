@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Basic Page Needs
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Mobile Specific Metas
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- FONT
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+        <!-- CSS
+        –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+        <link rel="stylesheet" href="css/normalize.css">
+        <link rel="stylesheet" href="css/skeleton.css">
+
+        <title>EE 374: Blockchain Foundations at Stanford</title>
+    </head>
+    <body><div class="container"><div class="row"><div class="column" style="margin-top: 20pt">
+        <h1>EE 374: Blockchain Foundations</h1>
+
+        <strong>Spring 2022</strong>
+
+        <ul>
+            <li><strong>Instructors</strong>: David Tse, Dionysis Zindros</li>
+            <li><strong>Teaching Assistants</strong>: Kamilla Nazirkhanova, Srivatsan Sridhar</li>
+        </ul>
+
+        <p>Office hours: TBD</p>
+
+        <p>
+            This graduate-level course teaches you about blockchain foundations. The course focuses on the first principles and foundations behind blockchains with the aim of understanding how and why blockchain technology works and is secure. We do not focus on Bitcoin or Ethereum engineering peculiarities, but we explore the general concepts of the blockchain field. However, the course is heavy on both engineering (writing code) and theory.
+        </p>
+
+        <p>
+            The course focuses on three questions:
+
+            <ul>
+                <li>What are blockchains?</li>
+                <li>How do they work?</li>
+                <li>Why are they secure?</li>
+            </ul>
+        </p>
+
+        <h2>Syllabus</h2>
+
+        <p>
+            The topics of the course include proof-of-work (in static and variable difficulty), proof-of-stake, transactions in the UTXO and accounts model, authenticated data structures such as Merkle Trees, and simple payment verification. A central topic of the course is understanding why blockchains are secure. We treat the question in theoretical depth using the cryptographic backbone model.
+        </p>
+
+        <p>
+            The full syllabus is as follows (we may still make small revisions).
+        </p>
+
+        <h3>Week 1: The setting</h3>
+        <ul>
+            <li>Administrivia</li>
+            <li>Money as a social construct</li>
+            <li>The network model, the gossip protocol</li>
+            <li>The adversarial model</li>
+            <li>The cryptographic approach: For all probabilistic polynomial-time adversaries with negligible probability</li>
+        </ul>
+
+        <h3>Week 2: Transactions</h3>
+        <ul>
+            <li>Commitment schemes</li>
+            <li>Hashes</li>
+            <li>Public/private keys</li>
+            <li>Signature schemes</li>
+            <li>Transactions</li>
+            <li>The UTXO model</li>
+            <li>Double spending</li>
+        </ul>
+
+        <h3>Week 3: Blocks and Chains</h3>
+        <ul>
+            <li>Blocks</li>
+            <li>Chains</li>
+            <li>Proof-of-work</li>
+            <li>The longest chain rule</li>
+            <li>Temporary forks</li>
+            <li>Mempool</li>
+            <li>Chain Growth, Common Prefix, Chain Quality</li>
+        </ul>
+
+        <h3>Week 4: Economics and Attacks</h3>
+        <ul>
+            <li>Censorship</li>
+            <li>Healing</li>
+            <li>Macroeconomic supply</li>
+            <li>Block rewards</li>
+            <li>Fees</li>
+            <li>Selfish mining</li>
+            <li>Mining pools</li>
+        </ul>
+
+        <h3>Week 5: Wallets and Accounts</h3>
+        <ul>
+            <li>Online and offline wallets</li>
+            <li>Hardware wallets</li>
+            <li>The account model</li>
+            <li>Balances</li>
+            <li>Nonces</li>
+        </ul>
+
+        <h3>Week 6: Light Clients</h3>
+        <ul>
+            <li>The Random Oracle model</li>
+            <li>Merkle Trees</li>
+            <li>SPV</li>
+            <li>Sparse Merkle Trees</li>
+        </ul>
+
+        <h3>Week 7: Consensus in Earnest</h3>
+        <ul>
+            <li>The Backbone model</li>
+            <li>The rushing adversary model</li>
+            <li>The synchronous network model</li>
+            <li>Chain Growth, Common Prefix, Chain Quality</li>
+            <li>Successful and uniquely successful rounds</li>
+            <li>Chernoff bounds revision</li>
+        </ul>
+
+        <h3>Week 8: Blockchains are Secure; Proof-of-Stake</h3>
+        <ul>
+            <li>Proof of Chain Growth</li>
+            <li>Proof of Common Prefix</li>
+            <li>Proof of Chain Quality</li>
+            <li>Proof of Safety and Liveness</li>
+            <li>Proof-of-Stake</li>
+            <li>Proof-of-Work vs Proof-of-Stake</li>
+            <li>Proof-of-Stake longest chain protocols: dynamic availability</li>
+        </ul>
+
+        <h3>Week 9: Proof of Stake</h3>
+        <ul>
+            <li>Proof-of-Stake BFT protocols: Fast confirmation, finality, accountability</li>
+            <li>The Availability-Finality and the Availability-Accountability Dilemmas</li>
+        </ul>
+
+        <h3>Week 10: Ethereum 2.0</h3>
+        <ul>
+            <li>Ethereum 2.0: An attempted resolution of the dilemmas</li>
+            <li>Provably secure finality and accountability gadgets</li>
+        </ul>
+
+        <h2>Who is this course for?</h2>
+
+        <p>
+            This is a new course for graduate-level students in computer science, electrical engineering, or related fields or as an advanced elective course for interested undergraduate students. The prerequisites for the course are a professional knowledge of at least one programming language (for implementing the node), a basic knowledge of networking (TCP/IP), basic understanding of probability theory (probabilities, expectations, distributions), discrete mathematics (graphs, proof techniques). A very basic understanding of cryptography (hashes, signatures, proof techniques) is helpful but not required.
+        </p>
+
+        <p>
+            <strong>Prerequisites</strong>
+
+            <ul>
+                <li>CS106A, CS106B, or CS106X, or relevant programming experience</li>
+                <li>CS103, or CS103B or related course on discrete math</li>
+                <li>CS109, MATH151, STATS116, or EE178 or related course on probability</li>
+            </ul>
+        </p>
+
+        <h2>Problem Sets</h2>
+
+        <p>
+            The problem sets are the most important part of this course.
+            The problem sets are about implementation.
+            They involve building our own blockchain, Marabu.
+            It is a proof-of-work UTXO blockchain designed for educational purposes to be simple to implement and debug. As a student, you will implement your own Marabu full node from scratch. Your node must connect to the nodes of other students and maintain a common blockchain with them. You will implement the protocol by following through the problem sets. The protocol is a simplified, educational protocol easy to debug and implement designed especially for this course. Even though it is simple, it implements a full blockchain which follows the same principles as a full blockchain such as Bitcoin and Ethereum, albeit with limited features (it allows only for simple payments and is not very efficient). You can use whatever programming language you know well for your implementation.
+            We recommend using TypeScript.
+            We have seen successful implementations in Python, TypeScript and Go. The problem sets guide you through implementing your node in a step-by-step fashion, so each problem set builds on top of the previous one to augment your node slowly adding new features until it is complete.
+            Students can collaborate to solve all problem sets in groups of up to 3 students. Only one submission is required per group.
+        </p>
+
+        <h2>Grading</h2>
+
+        The grade for the course will be determined according to the following breakdown (subject to change):
+
+        <ul>
+            <li><strong>Programming Exercises</strong>: 40%</li>
+            <li><strong>Midterm</strong>: 20%</li>
+            <li><strong>Final</strong>: 40%</li>
+        </ul>
+
+        <h2>Bibliography</h2>
+
+        <p>TBD</p>
+
+        <h2>Comparison to Other Courses</h2>
+
+        <p>This course is a good follow-up course on CS 251. CS 251 studies blockchains very broadly and covers a lot of material. It talks about consensus, smart contracts, Solidity, decentralized finance, zero-knowledge, BFT, and more. It also talks about Bitcoin-specific and Ethereum-specific details. In this course, we focus on the foundations of blockchains and speak only about the very basics concepts, in particular transactions and consensus, but in more detail and depth. We don't speak about engineering for Bitcoin and Ethereum specifically. On the engineering side of things, we implement consensus and transactions, and so these are explored in depth. On the theory side of things, we devote a couple weeks on proving the security of blockchains mathematically.</p>
+
+        <p>
+            CS251 is not a prerequisite, but if a student has taken CS 251, they will find this course easier to follow.
+        </p>
+
+        <p>
+            If you have taken EE 374 any previous year, <strong>this is a completely new course</strong>,
+            with a different syllabus and different psets.
+        </p>
+    </div></div></div></body>
+</html>
