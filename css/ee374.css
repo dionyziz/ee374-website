@@ -1,0 +1,13 @@
+h1 {
+  font-size: 32pt;
+}
+h2 {
+  font-size: 20pt;
+  margin: 10pt 0;
+}
+.container {
+  width: 800px;
+}
+ul {
+  list-style: none;
+}
