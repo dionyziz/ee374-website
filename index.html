@@ -94,44 +94,100 @@
             The full syllabus is as follows (we may still make small revisions).
         </p>
 
-        <h3>Week 1: The setting</h3>
+        <h3>Lecture 1: Money</h3>
         <ul>
             <li>Administrivia</li>
             <li>Money as a social construct</li>
-            <li>The network model, the gossip protocol</li>
-            <li>The adversarial model</li>
-            <li>The cryptographic approach: For all probabilistic polynomial-time adversaries with negligible probability</li>
+            <li>The network model</li>
+            <li>The non-eclipsing assumption</li>
+            <li>The gossip protocol</li>
         </ul>
 
-        <h3>Week 2: Transactions</h3>
+        <h3>Lecture 2: The adversary</h3>
         <ul>
-            <li>Commitment schemes</li>
-            <li>Hashes</li>
+            <li>The adversary A</li>
+            <li>The security parameter κ</li>
+            <li>The honest protocol Π</li>
+            <li>The adversarial model</li>
+            <li>Probabilistic polynomial-time adversaries</li>
+            <li>Negligible functions</li>
+            <li>Game-based security</li>
+            <li>Security proofs by computation reduction</li>
+            <li>Proofs by contradiction and forward proofs</li>
+        </ul>
+
+        <h3>Lecture 3: Primitives</h3>
+        <ul>
+            <li>The hash function: H</li>
+            <li>Preimage resistance, second preimage resistance, collision resistance</li>
+            <li>Collision resistance implies preimage resistance</li>
+            <li>Preimage resistance implies second preimage resistance</li>
             <li>Public/private keys</li>
             <li>Signature schemes</li>
+            <li>Signature correctness</li>
+            <li>Existential unforgeability</li>
+            <li>Ledgers</li>
+        </ul>
+
+        <h3>Lecture 4: Transactions</h3>
+        <ul>
             <li>Transactions</li>
+            <li>Inputs and outputs</li>
+            <li>The transaction graph</li>
+            <li>Change</li>
+            <li>Multiple inputs</li>
+            <li>Multiple outputs</li>
             <li>The UTXO model</li>
+            <li>The law of conservation</li>
+            <li>Verifying a transaction</li>
+        </ul>
+
+        <h3>Lecture 5: Blocks</h3>
+        <ul>
+            <li>Views in disagreement</li>
             <li>Double spending</li>
-        </ul>
-
-        <h3>Week 3: Blocks and Chains</h3>
-        <ul>
+            <li>The network delay Δ</li>
+            <li>Simple ideas don't work!</li>
+            <li>Rare events</li>
             <li>Blocks</li>
-            <li>Chains</li>
             <li>Proof-of-work</li>
-            <li>The longest chain rule</li>
-            <li>Temporary forks</li>
-            <li>Mempool</li>
-            <li>Chain Growth, Common Prefix, Chain Quality</li>
+            <li>The mining target T</li>
+            <li>The proof-of-work equation</li>
+            <li>The mining algorithm</li>
+            <li>Block freshness</li>
+            <li>The genesis block G</li>
+            <li>Chains</li>
         </ul>
 
-        <h3>Week 4: Economics and Attacks</h3>
+        <h3>Lecture 6: Chains</h3>
         <ul>
+            <li>Hash chains</li>
+            <li>The number n of parties</li>
+            <li>The number t of adversarial parties</li>
+            <li>The hashing power q</li>
+            <li>Rare events are irregular</li>
+            <li>Convergence opportunities and periods of silence</li>
+            <li>The honest majority assumption</li>
+            <li>The longest chain rule</li>
+            <li>Coinbase</li>
+            <li>Fees</li>
+            <li>Mempools</li>
+        </ul>
+
+        <h3>Lecture 7: Chain Virtues</h3>
+        <ul>
+            <li>Temporary forks</li>
+            <li>Convergence</li>
+            <li>The Nakamoto race</li>
+            <li>Chain Growth, Common Prefix, Chain Quality</li>
             <li>Censorship</li>
+            <li>Majority attacks</li>
+        </ul>
+
+        <h3>Lecture 8: Attacks</h3>
+        <ul>
             <li>Healing</li>
             <li>Macroeconomic supply</li>
-            <li>Block rewards</li>
-            <li>Fees</li>
             <li>Selfish mining</li>
             <li>Mining pools</li>
         </ul>
@@ -147,6 +203,7 @@
 
         <h3>Week 6: Light Clients</h3>
         <ul>
+            <li><span style='color: red'>Midterm</span></li>
             <li>The Random Oracle model</li>
             <li>Merkle Trees</li>
             <li>SPV</li>
