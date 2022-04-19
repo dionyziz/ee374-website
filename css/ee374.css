@@ -5,6 +5,9 @@ h2 {
   font-size: 20pt;
   margin: 10pt 0;
 }
+h3 {
+  font-size: 18pt;
+}
 .container {
   width: 800px;
 }
