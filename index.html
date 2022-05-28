@@ -83,7 +83,7 @@
             <li><a href="psets/pset5.pdf">Problem set 5</a></li>
             <li><a href="psets/pset6.pdf">Problem set 6</a></li>
         </ol>
-        
+
         <h2>Exams</h2>
         <ol>
             <li><a href="exams/EE_374_Spring_2022_Midterm_Solutions.pdf">Midterm with solutions</a></li>
@@ -212,55 +212,134 @@
             <li>Mining pools</li>
         </ul>
 
-        <h3>Week 5: Wallets and Accounts</h3>
+        <h3>Lecture 9: Variable Difficulty, Pools, Wallets</h3>
         <ul>
-            <li>Online and offline wallets</li>
-            <li>Hardware wallets</li>
+            <li>CPU, GPU, ASIC mining</li>
+            <li>Incentive compatibility</li>
+            <li>Block size limits</li>
+            <li>Transaction prioritization by fees</li>
+            <li>Macroeconomic policy, reward adjustment</li>
+            <li>The difficulty adjustment equation Τ_{j+1} = T_{j} (t_2 - t_1) / (mη)</li>
+            <li>Mining pools, the light PoW equation: H(B) ≤ 2^z T</li>
+            <li>The pooled mining protocol</li>
+            <li>Cold, hot, and hardware wallets</li>
+            <li>Wallet seeds, deterministic wallets</li>
+        </ul>
+
+        <h4>Lecture 10: Accounts and Balances, Merkle Trees</h4>
+        <ul>
             <li>The account model</li>
+            <li>Transactions in the account model</li>
             <li>Balances</li>
             <li>Nonces</li>
+            <li>The generic transition function δ</li>
+            <li>Blockchain as a State Machine Replication mechanism</li>
+            <li>UTXO vs accounts</li>
+            <li>The file storage problem</li>
+            <li>The Merkle Tree: compress, prove, verify</li>
+            <li>Proofs of inclusion, succinctness</li>
+            <li>Merkle Tree security proof by reduction from collision-resistant hashes</li>
         </ul>
 
-        <h3>Week 6: Light Clients</h3>
+        <h4><a href='https://stanford.zoom.us/rec/play/GCIVyL92oqcR-wSwurPLlgrUTHjoN5MA75855dwE30H8zjYcKpJ4HBJ8e-wCeOppl15FHasnROvwLJN8.jNWLpZAJ_F5GnrY5Links to an external site.'>Lecture 11: Light Clients; Backbone warmup</a></h4>
         <ul>
-            <li><span style='color: red'>Midterm</span></li>
-            <li>The Random Oracle model</li>
-            <li>Merkle Trees</li>
-            <li>SPV</li>
-            <li>Sparse Merkle Trees</li>
+            <li>The problem of scalability in blockchains: Scaling computation, communication, and storage</li>
+            <li>From x-bar to x using Merkle Trees</li>
+            <li>The Simple Payment Verification (SPV) protocol</li>
+            <li>The header chain</li>
+            <li>Miners, Full Nodes, Light Nodes</li>
+            <li>Chain virtues for light nodes</li>
+            <li>Privacy concerns for light nodes</li>
+            <li>Random Oracles, formally</li>
+            <li>The synchrony assumption Δ = 1. The round.</li>
         </ul>
 
-        <h3>Week 7: Consensus in Earnest</h3>
+        <h4>Lecture 12: Security in Earnest (I)</h4>
         <ul>
-            <li>The Backbone model</li>
-            <li>The rushing adversary model</li>
-            <li>The synchronous network model</li>
-            <li>Chain Growth, Common Prefix, Chain Quality</li>
-            <li>Successful and uniquely successful rounds</li>
-            <li>Chernoff bounds revision</li>
+            <li>The Environment and the Execution</li>
+            <li>The Rushing Adversary</li>
+            <li>The Sybil Adversary</li>
+            <li>The Network model, the gossiping model</li>
+            <li>The Non-Eclipsing Assumption</li>
+            <li>The honest backbone protocol</li>
+            <li>Maintaining, adopting, and having chains</li>
+            <li>Proof-of-work</li>
+            <li>The q-bounded Random Oracle</li>
+            <li>The Static Difficulty assumption</li>
+            <li>Chain validation; the δ* function</li>
+            <li>Successful rounds</li>
+            <li>Convergence opportunities</li>
+            <li>Formal definition of Chain Virtues</li>
+            <li>Common Prefix, the parameter k</li>
+            <li>Chain Quality, the parameters μ and ℓ</li>
+            <li>Chain Growth, the parameters τ and s</li>
+            <li>The formal honest majority assumption: t &lt; (1 - δ)(n - t)</li>
+            <li>The honest advantage δ</li>
+            <li>Convergence Opportunities are useful: The Pairing Lemma and its proof</li>
         </ul>
 
-        <h3>Week 8: Blockchains are Secure; Proof-of-Stake</h3>
+        <h4>Lecture 13: Security in Earnest (II)</h4>
         <ul>
-            <li>Proof of Chain Growth</li>
-            <li>Proof of Common Prefix</li>
-            <li>Proof of Chain Quality</li>
-            <li>Proof of Safety and Liveness</li>
-            <li>Proof-of-Stake</li>
-            <li>Proof-of-Work vs Proof-of-Stake</li>
-            <li>Proof-of-Stake longest chain protocols: dynamic availability</li>
+            <li>Ledger Safety and Liveness, formally. The liveness parameter u.</li>
+            <li>Proof of Safety from Common Prefix</li>
+            <li>Proof of Liveness from Chain Quality and Chain Growth; u = max((ℓ + k) / τ, s)</li>
+            <li>The Chain Growth Lemma and its proof</li>
+            <li>The successful round indicator X</li>
+            <li>The convergence opportunity indicator Y</li>
+            <li>The adversarial success indicator Z</li>
+            <li>The expectations of X, Y, and Z</li>
+            <li>Bernoulli's inequality</li>
+            <li>Lower and upper bounds on the expectation of X</li>
+            <li>Lower bounds on the expectation of Y</li>
+            <li>Good things converge: The Chernoff bound</li>
+            <li>The world is good, usually: Typical executions</li>
+            <li>The Chernoff duration λ</li>
+            <li>The Chernoff error ε</li>
+            <li>Proof of Typicality Theorem</li>
+            <li>The Balancing Equation: 3ε + 3f &leq; δ</li>
+            <li>A plot of X, Y, and Z with 3f, 3ε and δ</li>
         </ul>
 
-        <h3>Week 9: Proof of Stake</h3>
+        <h4>Lecture 14: Security in Earnest (III)</h4>
         <ul>
-            <li>Proof-of-Stake BFT protocols: Fast confirmation, finality, accountability</li>
-            <li>The Availability-Finality and the Availability-Accountability Dilemmas</li>
+            <li>Reminder of bounds on the expectations of X and Y</li>
+            <li>Upper bound on the expectation of Z</li>
+            <li>Typical bounds, and proof that Z &leq; Y</li>
+            <li>Chains grow: The Chain Growth theorem and its proof</li>
+            <li>The Patience Lemma and its proof</li>
+            <li>The Common Prefix theorem and its proof</li>
+            <li>Discussion on the relationship between ε and λ</li>
+            <li>You can't have it all: Discussion on the parametrization options for ε, f, δ</li>
         </ul>
 
-        <h3>Week 10: Ethereum 2.0</h3>
+        <h3>Lecture 15: Longest Chain Proof of Stake (I)</h3>
         <ul>
-            <li>Ethereum 2.0: An attempted resolution of the dilemmas</li>
-            <li>Provably secure finality and accountability gadgets</li>
+            <li>Proof of Work's perils and environmental impact</li>
+            <li>Proof of Work vs Proof of Stake</li>
+            <li>Dangers of Proof of Stake</li>
+            <li>The Proof of Stake equation</li>
+        </ul>
+
+        <h3>Lecture 16: Longest Chain Proof of Stake (II)</h3>
+        <ul>
+            <li>Proof of Work's perils and environmental impact</li>
+            <li>Proof of Work vs Proof of Stake</li>
+            <li>Dangers of Proof of Stake</li>
+            <li>The Proof of Stake equation</li>
+        </ul>
+
+        <h3>Lecture 17: BFT Proof of Stake (I)</h3>
+        <ul>
+            <li>Everything is a Race and Nakamoto Always Wins</li>
+            <li>Verifiable Random Functions</li>
+            <li>VRF correctness</li>
+            <li>The unpredictability game</li>
+            <li>Towards instant finality</li>
+        </ul>
+
+        <h3>Lecture 18: BFT Proof of Stake (II)</h3>
+        <ul>
+            <li>The Streamlet protocol and its proof of safety</li>
         </ul>
 
         <h2>Who is this course for?</h2>
