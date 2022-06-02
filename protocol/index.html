@@ -1,0 +1,357 @@
+<h1>Overview</h1>
+
+<p>For this course, we will develop our own blockchain. Each student will write their own
+independent implementation of a node for our network in their programming language of
+choice. This document outlines how the system will work and how nodes will communicate.</p>
+
+<p>During your implementation, be aware that neighbouring nodes can be malicious. Your
+implementation must be resilient to simple and complex attacks. Simple attacks can be
+the supply of invalid data. Complex attacks can involve signatures, proof-of-work,
+double spending, and blocks, all of which must be validated carefully.</p>
+
+<p>The chain is a static difficulty proof-of-work UTXO-based blockchain over a TCP
+network protocol.</p>
+
+<p>The chain is called <em>Marabu</em> (like the bird, but spelled with <em>u</em> instead of <em>ou</em>), but you
+should name your node something else.</p>
+
+<h2>Networking</h2>
+
+<p>The peer-to-peer network works over TCP. The default TCP port of the protocol is 18018,
+but you can use any port. If your node is running behind NAT, make sure your port is forwarded.</p>
+
+<h2>Bootstrapping</h2>
+
+<p>Your node will initially connect to a list of known peers. From there, it will build
+its own list of known peers. We will maintain a list of bootstrapping peer IPs / domains
+in this document when they become available.</p>
+
+<h2>Data validation</h2>
+
+<p>Your client must disconnect from their peer in case they receive invalid data. Be rigorous
+about network data validation and do not accept malformed data. Log any incorrect data received
+to help us with debugging.</p>
+
+<h1>Cryptographic Primitives</h1>
+
+<h2>Hashes</h2>
+
+<p>We use SHA-256 as our hash for everything. This is used both for content-addressible application
+objects as well as proof-of-work. When hashes appear in our JSON, they should be in hexadecimal
+format.</p>
+
+<h2>Signatures</h2>
+
+<p>We use Ed25519 signatures. Public keys and signatures should be
+byte-encoded as described in <a href="https://datatracker.ietf.org/doc/html/rfc8032#section-5.1.5">RFC 8032</a>.
+A library will typically take care of this process, for example
+<a href="https://golang.org/pkg/crypto/ed25519/#GenerateKey"><code>crypto/ed25519</code> in Go</a>.
+Once a signature or public key is byte-encoded, it is converted to hex to represent as a string
+within our JSON.
+Whenever we refer to a "public key" or a "signature" in this protocol, we mean the byte-encoded hexified data respectively.</p>
+
+<h2>Hexification</h2>
+
+<p>Hex strings must be in lower case.</p>
+
+<h1>Application Objects</h1>
+
+<p>Application Objects are objects that must be stored by each node. These are content-addressed by
+the SHA256 hash of their JSON representation. It is therefore important to have the same JSON
+representation as other clients so that the same objects are addressed by the same hash. You
+should normalize your JSON and ensure it is in
+<a href="https://github.com/cyberphone/json-canonicalization">canonical JSON form</a>.
+The examples in this document contain extra whitespace for readability, but these should not
+be sent over the network.
+The SHA256 of the JSON contents is the objectid.</p>
+
+<p>An Application Object is a JSON dictionary containing the "type" key and further keys depending on its type.</p>
+
+<p>There are two types of Application Objects: Transactions and Blocks. Their objectids are called txid
+and blockid respectively.</p>
+
+<h2>Transactions</h2>
+
+<p>This represents a transaction and has the type <code>transaction</code>. It contains the key <code>inputs</code> containing
+an array of inputs, and the key <code>outputs</code> containing an array of outputs.</p>
+
+<p>An input contains a pointer to a
+previous output (the outpoint), and a signature. An input is a dictionary containing two
+keys: An <code>outpoint</code> key and a <code>sig</code> key. The <code>outpoint</code> key contains a dictionary of two keys:
+<code>txid</code> and <code>index</code>. The <code>txid</code> is the txid of a previous transaction, while the <code>index</code> is the natural
+number (zero-based) indexing an output within that transaction. The <code>sig</code> key contains the signature.</p>
+
+<p>Signatures are created using the private keys corresponding to the public keys that are pointed to
+by their respective outpoint. Signatures are created on the plaintext which consists of the transaction
+they (not their public keys!) are contained within, except that the <code>sig</code> values are all replaced with <code>null</code>.
+This is necessary because a signature cannot sign itself.</p>
+
+<p>An output is a dictionary with keys <code>value</code> and <code>pubkey</code>. The <code>value</code> is a non-negative integer indicating
+how much value is carried by the output. The value is denominated in picabu, the smallest denomination in Marabu.
+1 bu = 10^12 picabu. The <code>pubkey</code> is a public key, the
+receipient of the money.</p>
+
+<p><code>json
+{
+  "type": "transaction",
+  "inputs": [
+    {
+      "outpoint": {
+        "txid": "f71408bf847d7dd15824574a7cd4afdfaaa2866286910675cd3fc371507aa196",
+        "index": 0
+      },
+      "sig": "3869a9ea9e7ed926a7c8b30fb71f6ed151a132b03fd5dae764f015c98271000e7da322dbcfc97af7931c23c0fae060e102446ccff0f54ec00f9978f3a69a6f0f"
+    }
+  ],
+  "outputs": [
+    {
+      "pubkey": "077a2683d776a71139fd4db4d00c16703ba0753fc8bdc4bd6fc56614e659cde3",
+      "value": 5100000000
+    }
+  ]
+}
+</code></p>
+
+<p>Transactions must satisfy the weak law of conservation: The sum of input values must be
+equal or exceed the sum of output values. Any remaining value can be collected as fees
+by the miner confirming the transaction.</p>
+
+<p>If the transaction is a coinbase transaction, then it will not contain an <code>inputs</code> key but it
+will contain a <code>height</code> key with the block's height as the value. The coinbase transaction cannot
+we spent in the same block.</p>
+
+<p><code>json
+{
+  "type": "transaction",
+  "height": 128,
+  "outputs": [
+    {
+      "pubkey": "077a2683d776a71139fd4db4d00c16703ba0753fc8bdc4bd6fc56614e659cde3",
+      "value": 50000000000
+    }
+  ]
+}
+</code></p>
+
+<h2>Blocks</h2>
+
+<p>This represents a block and has the type "block". It contains the key <code>txids</code>, which is a list of the txids within
+the block, a <code>nonce</code> which is a 32-byte hexified value, a <code>previd</code> which is the blockid of the previous block in
+the chain, a <code>created</code> which is an (integer) UNIX timestamp in seconds, and a <code>T</code> which is a 32-byte hexadecimal integer
+and is the mining target. Optionally it can contain a <code>miner</code> field and a <code>note</code> field, which can be any ASCII-printable strings up to 128 characters long each.</p>
+
+<p><code>json
+{
+  "type": "block",
+  "txids": [
+    "740bcfb434c89abe57bb2bc80290cd5495e87ebf8cd0dadb076bc50453590104"
+  ],
+  "nonce": "a26d92800cf58e88a5ecf37156c031a4147c2128beeaf1cca2785c93242a4c8b",
+  "previd": "0024839ec9632d382486ba7aac7e0bda3b4bda1d4bd79be9ae78e7e1e813ddd8",
+  "created": 1622825642,
+  "T": "003a000000000000000000000000000000000000000000000000000000000000",
+  "miner": "dionyziz",
+  "note": "A sample block"
+}
+</code></p>
+
+<p>Block validity mandates that the block satisfies the proof-of-work equation:
+<code>blockid &lt; T</code>.</p>
+
+<p>The genesis block has a null <code>previd</code>. This is our genesis block:</p>
+
+<p><code>json
+{
+  "T": "00000002af000000000000000000000000000000000000000000000000000000",
+  "created": 1624219079,
+  "miner": "dionyziz",
+  "nonce": "0000000000000000000000000000000000000000000000000000002634878840",
+  "note": "The Economist 2021-06-20: Crypto-miners are probably to blame for the graphics-chip shortage",
+  "previd": null,
+  "txids": [],
+  "type": "block"
+}
+</code></p>
+
+<p>All valid chains must extend genesis. Each block must have a timestamp which is later than its
+predecessor but not after the current time.</p>
+
+<p>The <code>txids</code> in a block may contain one coinbase transaction. This transaction must be the first in the
+txids. That transaction has no inputs but has a <code>height</code> key containing the height of the block
+the coinbase transaction is included in. It has exactly one output which generates
+50 * 10^12 new picabus and also collects fees from the transactions confirmed in the block. The value
+in this output cannot exceed the sum of the new coins plus the fees, but it can be less than this. The
+<code>height</code> in the coinbase transaction must match the height of the block the transaction is contained in.
+This is so that coinbase transactions with the same public key in different blocks are distinct.</p>
+
+<p>All blocks must have a target <code>T</code> of <code>00000002af000000000000000000000000000000000000000000000000000000</code>.
+The genesis blockid is <code>00000000a420b7cefa2b7730243316921ed59ffe836e111ca3801f82a4f5360e</code>. Check this
+to ensure your implementation is performing correct JSON canonicalization.</p>
+
+<h1>Messages</h1>
+
+<p>Every message exchanged by two peers over TCP is a JSON message. These JSON messages are separated
+from one another using '\n'. The JSON messages themselves must not contain new line endings
+('\n'), but they may contain escaped line endings within their strings.</p>
+
+<p>Every JSON message is a dictionary. This dictionary always has at least the key "type" set,
+which is a string and defines the message types. Each message may contain its own keys depending
+on its type.</p>
+
+<h2>Hello</h2>
+
+<p>When you connect to another client, you must both send a { "type": "hello" } message. The message
+must also contain a <code>version</code> key, which is always set to <code>0.8.0</code>. If the version you receive differs
+from <code>0.8.x</code> you must disconnect. The message can also contain an <code>agent</code> key, with a string description
+of the node software name and version the node is running.</p>
+
+<p>You must exchange a hello message both ways before you exchange any
+other message. If a message is sent prior to the hello message, you must close the connection.
+Messages can be sent in any order after that.</p>
+
+<p><code>json
+{
+  "type": "hello",
+  "version": "0.8.0",
+  "agent": "Marabu-Core Client 0.8"
+}
+</code></p>
+
+<h2>Error</h2>
+
+<p><em>Optionally</em>, you can send objects with implementation-specific error messages to describe any exceptions
+encountered. An error object should be of type <code>error</code> and contain an <code>error</code> key with a string value
+that describes the error at hand.</p>
+
+<p><code>json
+{
+  "type": "error",
+  "error": "Unsupported message type received"
+}
+</code></p>
+
+<h2>GetPeers</h2>
+
+<p>If you want to know what peers are known to your peer, you send them a <code>getpeers</code> message. This
+message has no payload and must be responded-to with a <code>peers</code> message.</p>
+
+<p><code>json
+{ "type": "getpeers" }
+</code></p>
+
+<h2>Peers</h2>
+
+<p>This message can be volunteered or sent in response to a <code>getpeers</code> message. It contains a <code>peers</code>
+key which is an array of peers. Every peer is a string in the form of <code>&lt;host&gt;:&lt;port&gt;</code>.  The default port
+is 18018 but other ports are valid. Inclusion of the port in the string is mandatory.
+Examples for different types of hosts are provided below.</p>
+
+<p><code>json
+{
+  "type": "peers",
+  "peers": [
+    "dionyziz.com:18018", /* dns */
+    "138.197.191.170:18018", /* ipv4 */
+    "[fe80::f03c:91ff:fe2c:5a79]:18018" /* ipv6 */
+   ]
+}
+</code></p>
+
+<p>When sending a <code>peers</code> message, a node can include itself in the list if it is listening for connections.</p>
+
+<h2>GetObject</h2>
+
+<p>This message requests an object addressed by the given hash. It contains an <code>objectid</code> key which is the
+address of the object.</p>
+
+<p><code>json
+{
+  "type": "getobject",
+  "objectid": "0024839ec9632d382486ba7aac7e0bda3b4bda1d4bd79be9ae78e7e1e813ddd8"
+}
+</code></p>
+
+<h2>IHaveObject</h2>
+
+<p>This message advertises that the sending peer has an object with a given hash addressed by the <code>objectid</code> key.
+The receiving peer may request the object (using <code>getobject</code>) in case it does not have it.</p>
+
+<p><code>json
+{
+  "type": "ihaveobject",
+  "objectid": "0024839ec9632d382486ba7aac7e0bda3b4bda1d4bd79be9ae78e7e1e813ddd8"
+}
+</code></p>
+
+<p>In our gossiping protocol, whenever a peer receives a new object and validates it, it advertises the new object
+to its peers.</p>
+
+<h2>Object</h2>
+
+<p>This message sends an object from one peer to another. This can be voluntary, or as a response to a <code>getobject</code>
+message. It contains an <code>object</code> key which contains the object in question.</p>
+
+<p><code>json
+{
+  "type": "object",
+  "object": {
+    "type": "block",
+    "txids": [
+      "740bcfb434c89abe57bb2bc80290cd5495e87ebf8cd0dadb076bc50453590104"
+    ],
+    "nonce": "a26d92800cf58e88a5ecf37156c031a4147c2128beeaf1cca2785c93242a4c8b",
+    "previd": "0024839ec9632d382486ba7aac7e0bda3b4bda1d4bd79be9ae78e7e1e813ddd8",
+    "created": "1622825642",
+    "T": "003a000000000000000000000000000000000000000000000000000000000000"
+  }
+}
+</code></p>
+
+<h2>GetMempool</h2>
+
+<p>Request the mempool of the peer with a message of type <code>getmempool</code>. There is no payload in this message.
+The peer responds with a <code>mempool</code> message.</p>
+
+<p><code>json
+{
+  "type": "getmempool"
+}
+</code></p>
+
+<h2>Mempool</h2>
+
+<p>This message, with type <code>mempool</code>, is sent as a response to a <code>getmempool</code> message, or it can be volunteered.
+It includes a list of all txids that the sending peer has in its mempool, i.e., are not
+yet confirmed. These are included in an array with the key <code>txids</code>.</p>
+
+<p><code>json
+{
+  "type": "mempool",
+  "txids": []
+}
+</code></p>
+
+<h2>GetChainTip</h2>
+
+<p>Request the current blockchain tip of the peer with a message of type <code>getchaintip</code>. There is no payload in this message.</p>
+
+<p><code>json
+{
+  "type": "getchaintip"
+}
+</code></p>
+
+<h2>ChainTip</h2>
+
+<p>This message, with type <code>chaintip</code>, is sent as a response to the <code>getchaintip</code> message, or it can be volunteered.
+It includes a single key called <code>blockid</code> with the blockid of the current tip.</p>
+
+<p><code>json
+{
+  "type": "chaintip",
+  "blockid": "0024839ec9632d382486ba7aac7e0bda3b4bda1d4bd79be9ae78e7e1e813ddd8"
+}
+</code></p>
+
+<p>The receiving peer can then use <code>getobject</code> to retrieve the block contents and then follow up with more
+<code>getobject</code> messages for each <code>previd</code> recursively to retrieve the whole blockchain as needed.</p>
